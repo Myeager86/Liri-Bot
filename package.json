@@ -1,0 +1,23 @@
+{
+  "name": "Liri-Bot",
+  "version": "1.0.0",
+  "description": "a liri bot",
+  "main": "keys.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Myeager86/Liri-Bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Myeager86/Liri-Bot/issues"
+  },
+  "homepage": "https://github.com/Myeager86/Liri-Bot#readme",
+  "dependencies": {
+    "dotenv": "^5.0.1"
+  }
+}
