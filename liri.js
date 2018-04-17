@@ -1,10 +1,8 @@
-// import { constants } from "http2";
-
 //Use the following arguments to interact with LIRI
-// "my-tweets"
-// "spotify-this-song"
-// "movie-this"
-// "do-what-it-says"
+    // "my-tweets"
+    // "spotify-this-song"
+    // "movie-this"
+    // "do-what-it-says"
 
 //these add other programs to this one
 const fs = require('fs');
@@ -15,16 +13,16 @@ const request = require('request');
 
 // var spotifyKey = new Spotify(keys.spotify);
 
-const userSearch = function(caseData, functionData) {
-    switch (caseData) {
+const userSearch = function(caseInfo, functionInfo) {
+    switch (caseInfo) {
       case 'my-tweets':
         getTweets();
         break;
       case 'spotify-this-song':
-        SpotifyThis(functionData);
+        SpotifyThis(functionInfo);
         break;
       case 'movie-this':
-        movieThis(functionData);
+        movieThis(functionInfo);
         break;
       case 'do-what-it-says':
         doWhatItSays();
@@ -60,13 +58,13 @@ const getArtistNames = function(artist) {
   return artist.name;
 };
 
-const SpotifyThis = function(songName) {
-  //If it doesn't find a song, find Blink 182's What's my age again
-  if (songName === undefined) {
-    songName = 'The Sign';
+//   Spotify function 
+const SpotifyThis = function(songTitle) { 
+  if (songTitle === undefined) {
+    songTitle = 'The Sign';
   };
 
-  spotify.search({ type: 'track', query: songName }, function(err, data) {
+  spotify.search({type: 'track', query: songTitle}, function(err, data) {
     if (err) {
       console.log(err);
       return;
@@ -88,7 +86,7 @@ const SpotifyThis = function(songName) {
   });
 };
 
-
+// movie function 
 const movieThis = function(movieTitle) {
 
   if (movieTitle === undefined) {
@@ -103,37 +101,33 @@ const movieThis = function(movieTitle) {
       let jsonData = JSON.parse(body);
 
       data.push({
-      'Title: ' : jsonData.Title,
-      'Year: ' : jsonData.Year,
-      'IMDB Rating: ' : jsonData.imdbRating,
-      'Rotten Tomatoes Rating: ' : jsonData.tomatoRating,
-      'Country: ' : jsonData.Country,
-      'Language: ' : jsonData.Language,
-      'Plot: ' : jsonData.Plot,
-      'Actors: ' : jsonData.Actors
+         'Title: ' : jsonData.Title,
+         'Year: ' : jsonData.Year,
+         'IMDB Rating: ' : jsonData.imdbRating,
+         'Rotten Tomatoes Rating: ' : jsonData.tomatoRating,
+         'Country: ' : jsonData.Country,
+         'Language: ' : jsonData.Language,
+         'Plot: ' : jsonData.Plot,
+         'Actors: ' : jsonData.Actors
   });
       console.log(data);
-      writeToLog(data);
+     writeToLog(data);
 }
   });
 
 }
 
+// Do what it says function
 const doWhatItSays = function() {
   fs.readFile("random.txt", "utf8", function(error, data) {
     console.log(data);
     writeToLog(data);
     var dataArr = data.split(',')
 
-    // if (dataArr.length == 2) {
-    //   userSearch(dataArr[0], dataArr[1]);
-    // } else if (dataArr.length == 1) {
-    //   userSearch(dataArr[0]);
-    // }
-
   });
 }
 
+// write info to the log.txt file 
 const writeToLog = function(data) {
     fs.appendFile("log.txt", '\r\n\r\n');
   
@@ -146,9 +140,10 @@ const writeToLog = function(data) {
     });
   }
 
-//run this on load of js file
+//  Function for runLiri to access the switch cases and then run the associated functions 
 const runLiri = function(argOne, argTwo) {
   userSearch(argOne, argTwo);
 };
 
+// Run this on load 
 runLiri(process.argv[2], process.argv[3]);
