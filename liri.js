@@ -1,19 +1,19 @@
-import { constants } from "http2";
+// import { constants } from "http2";
 
-//Liri takes the following arguments
-// * my-tweets
-// * spotify-this-song
-// * movie-this
-// * do-what-it-says
+//Use the following arguments to interact with LIRI
+// "my-tweets"
+// "spotify-this-song"
+// "movie-this"
+// "do-what-it-says"
 
 //these add other programs to this one
-const dataKeys = require("./keys.js");
 const fs = require('fs');
+const dataKeys = require("./keys.js");
 const twitter = require('twitter');
 const spotify = require('spotify');
 const request = require('request');
 
-var spotifyKey = new Spotify(keys.spotify);
+// var spotifyKey = new Spotify(keys.spotify);
 
 const userSearch = function(caseData, functionData) {
     switch (caseData) {
@@ -34,19 +34,20 @@ const userSearch = function(caseData, functionData) {
     }
   }
 
+//   Twitter function
   const getTweets = function() {
     const client = new Twitter(keys.twitter);
   
-    const params = { screen_name: 'ednas', count: 10 };
+    const params = { screen_name: 'mikeYeager86', count: 10 };
   
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
   
       if (!error) {
-        var data = []; //empty array to hold data
+        var data = []; 
         for (var i = 0; i < tweets.length; i++) {
           data.push({
-              'created at: ' : tweets[i].created_at,
               'Tweets: ' : tweets[i].text,
+              'wrote at: ' : tweets[i].wrote_at
           });
         }
         console.log(data);
@@ -55,12 +56,10 @@ const userSearch = function(caseData, functionData) {
     });
   };
 
-//Creates a function for finding artist name from spotify
 const getArtistNames = function(artist) {
   return artist.name;
 };
 
-//Function for finding songs on Spotify
 const SpotifyThis = function(songName) {
   //If it doesn't find a song, find Blink 182's What's my age again
   if (songName === undefined) {
@@ -69,19 +68,19 @@ const SpotifyThis = function(songName) {
 
   spotify.search({ type: 'track', query: songName }, function(err, data) {
     if (err) {
-      console.log('Error occurred: ' + err);
+      console.log(err);
       return;
     }
 
     let songs = data.tracks.items;
-    let data = []; //empty array to hold data
+    let data1 = []; 
 
     for (var i = 0; i < songs.length; i++) {
-      data.push({
+      data1.push({
         'artist(s)': songs[i].artists.map(getArtistNames),
         'song name: ': songs[i].name,
         'preview song: ': songs[i].preview_url,
-        'album: ': songs[i].album.name,
+        'album: ': songs[i].album.name
       });
     }
     console.log(data);
@@ -90,18 +89,18 @@ const SpotifyThis = function(songName) {
 };
 
 
-const movieThis = function(movieName) {
+const movieThis = function(movieTitle) {
 
-  if (movieName === undefined) {
-    movieName = 'Mr. Nobody';
+  if (movieTitle === undefined) {
+    movieTitle = 'Mr. Nobody';
   }
 
-  const urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+  const movieURL = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=trilogy";
 
-  request(urlHit, function(error, response, body) {
+  request(movieURL, function(error, response, body) {
     if (!error && response.statusCode == 200) {
-      var data = [];
-      var jsonData = JSON.parse(body);
+      let data = [];
+      let jsonData = JSON.parse(body);
 
       data.push({
       'Title: ' : jsonData.Title,
@@ -126,11 +125,11 @@ const doWhatItSays = function() {
     writeToLog(data);
     var dataArr = data.split(',')
 
-    if (dataArr.length == 2) {
-      userSearch(dataArr[0], dataArr[1]);
-    } else if (dataArr.length == 1) {
-      userSearch(dataArr[0]);
-    }
+    // if (dataArr.length == 2) {
+    //   userSearch(dataArr[0], dataArr[1]);
+    // } else if (dataArr.length == 1) {
+    //   userSearch(dataArr[0]);
+    // }
 
   });
 }
@@ -148,8 +147,8 @@ const writeToLog = function(data) {
   }
 
 //run this on load of js file
-const runThis = function(argOne, argTwo) {
+const runLiri = function(argOne, argTwo) {
   userSearch(argOne, argTwo);
 };
 
-runThis(process.argv[2], process.argv[3]);
+runLiri(process.argv[2], process.argv[3]);
